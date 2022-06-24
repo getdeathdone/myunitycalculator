@@ -181,6 +181,7 @@ public class Calcu : MonoBehaviour
         input_1 = input_2 = 0;
         click = 0;
         result = textField.text;
+        viewText = textField.text;
 
         isAnswer = true;
         isOperand = false;
@@ -189,10 +190,14 @@ public class Calcu : MonoBehaviour
         }
     }
 
-    public void ButtonBackspace()
-    {
-        viewText = viewText.Remove(viewText.Length - 1);
-        textField.text = viewText;
+    public void ButtonBackspace() // Эта кнопка не совсем корректно работает, не успел до ума довести  
+    {   
+   
+            viewText = viewText.Remove(viewText.Length - 1);
+            textField.text = viewText;        
+        
+
+
     }
 
     public void ButtonClear()

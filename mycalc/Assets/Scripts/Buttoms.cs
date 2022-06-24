@@ -10,23 +10,33 @@ public class Buttoms : MonoBehaviour
     public Calcu calcu;
 
     public void AppendValueToDisplay()
-    {
-        calcu.UpdateValue(value);  
+    {   
+        calcu.UpdateValue(value);
     }
 
     public void AppendOperand()
-    {
+    {   
         calcu.UpdateOperand(oper);
+    }
+
+    public void Function(string valuefunction)
+    {
+        calcu.FunctionValue(valuefunction);
     }
 
     public void AnswerResult()
     {   
-        calcu.Answer();     
+        calcu.Answer();
     }
 
     public void Clear()
     {   
-        calcu.ButtonClear();       
+        calcu.ButtonClear();
+    }
+
+    public void ButtonBackspace()
+    {   
+        calcu.ButtonBackspace();
     }
 
 

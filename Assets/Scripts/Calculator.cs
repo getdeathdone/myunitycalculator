@@ -7,50 +7,31 @@ using UnityEngine.UI;
 public class Calculator : MonoBehaviour
 {
     public InputField textField;
-    string viewText;
-    string tempText;
-    string operand;
-    string result;
-    string tempOper;
-    string resultFunction;
+    string viewText, tempText, operand, result, tempOper, resultFunction;
 
-    double input_1;
-    double input_2;
+    double input_1, input_2;
     float inputFunction;
     int click;
 
-    bool isAnswer = false;
-    bool isResultValue = false;
-    bool isOperand = false;
-    
+    bool isAnswer, isOperand ,isResultValue = false;
 
     public void UpdateValue(string newValue)
     {   
         
         if(isAnswer==true)
-            {   
-                tempText = operand = null;
+        {   
+            tempText = operand = null;
 
-                if(isResultValue==true)
-                {
-                    textField.text = result;
-                    viewText = result;
-                    result = null;
-                    isResultValue = false;
-                    
-                }   
-                
-                viewText += newValue;
-                textField.text = viewText.ToString();
-                
-            } else
-            {
-                viewText += newValue;
-                textField.text = viewText.ToString();
-                Debug.Log("viewText = " + viewText);
-            }
+            if(isResultValue==true)
+                ChangeAfterAnswer();
+        }
+        
+        viewText += newValue;
+        textField.text = viewText.ToString();
+        
+        Debug.Log("viewText = " + viewText);
 
-            resultFunction = null;
+        resultFunction = null;
                 
         if(isOperand)
         {
@@ -65,10 +46,7 @@ public class Calculator : MonoBehaviour
         {
             if(isResultValue==true)
                 {
-                textField.text = result;
-                viewText = result;
-                result = null;
-                isResultValue = false;       
+                    ChangeAfterAnswer();     
                 }
 
             viewText += ",";
@@ -79,7 +57,8 @@ public class Calculator : MonoBehaviour
     public void UpdateOperand(string newOperand)
     {   
         if(viewText!=null) 
-            { click++;      
+        {   
+            click++;      
                 if(click == 1)
                 {   
                     if((isAnswer==true)&(result!=null))
@@ -87,7 +66,6 @@ public class Calculator : MonoBehaviour
                     tempText = operand = null;
                     input_1 = System.Convert.ToDouble(result.ToString());
                     viewText = result;
-                    
                     } else
                     {   
                     input_1 = System.Convert.ToDouble(viewText.ToString());
@@ -102,7 +80,6 @@ public class Calculator : MonoBehaviour
             } 
 
             viewText += newOperand; 
-
             textField.text = viewText.ToString();
             isAnswer = false;
 
@@ -113,9 +90,7 @@ public class Calculator : MonoBehaviour
 
             operand = newOperand;
             isOperand = true;
-
-        }
-        
+        } 
     }
 
     public void FunctionValue(string newFunction)
@@ -186,8 +161,8 @@ public class Calculator : MonoBehaviour
 
         input_1 = input_2 = 0;
         click = 0;
-        result = textField.text;
-        viewText = textField.text;
+        
+        result = viewText = textField.text;
 
         isAnswer = true;
         isOperand = false;
@@ -196,10 +171,22 @@ public class Calculator : MonoBehaviour
         }
     }
 
-    public void ButtonBackspace() // Эта кнопка не совсем корректно работает, не успел до ума довести  
+    public void ButtonBackspace() 
     {   
+        if((isOperand==true)&(click==1)&(tempText==null))
+        {
+            isOperand = false;
+            operand = null;
+            click = 0;
+        }
+
+        if(isOperand)
+        {
+            tempText = tempText.Remove(tempText.Length - 1);
+        }
+
         viewText = viewText.Remove(viewText.Length - 1);
-        textField.text = viewText;        
+        textField.text = viewText;      
     }
 
     public void ButtonClear()
@@ -212,6 +199,13 @@ public class Calculator : MonoBehaviour
 
         isAnswer = false;
         isOperand = false;
+        isResultValue = false;
+    }
+
+    public void ChangeAfterAnswer()
+    {
+        textField.text = viewText = result;
+        result = null;
         isResultValue = false;
     }
 }

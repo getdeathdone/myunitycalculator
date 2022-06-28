@@ -7,33 +7,25 @@ using UnityEngine.UI;
 public class Calculator : MonoBehaviour
 {
     public InputField textField;
-    string viewText, tempText, operand, result, tempOper, resultFunction;
-
+    string viewText, tempText, operand, result, tempOper;
+    byte click, periodinput_1, periodinput_2;
     double input_1, input_2;
     float inputFunction;
-    int click;
+   
 
     bool isAnswer, isOperand ,isResultValue = false;
 
     public void UpdateValue(string newValue)
     {   
         
-        if(isAnswer==true)
-        {   
-            tempText = operand = null;
-
-            if(isResultValue==true)
-                ChangeAfterAnswer();
-        }
+        ChangeAfterAnswerAddValue();
         
         viewText += newValue;
         textField.text = viewText.ToString();
         
         Debug.Log("viewText = " + viewText);
-
-        resultFunction = null;
                 
-        if(isOperand)
+        if(isOperand==true)
         {
             tempText = tempText + newValue;
         }
@@ -42,16 +34,58 @@ public class Calculator : MonoBehaviour
 
     public void UpdatePeriod()
     {   
-        if ( System.Convert.ToDouble(viewText.ToString())-System.Convert.ToInt32(viewText.ToString()) == 0)
-        {
-            if(isResultValue==true)
-                {
-                    ChangeAfterAnswer();     
+        if((isOperand==false)&(viewText!=null))
+        {   
+            if ( System.Convert.ToDouble(viewText.ToString())-System.Convert.ToInt32(viewText.ToString()) == 0)
+            {   
+                ChangeAfterAnswerAddValue();     
+                    
+                viewText += ",";
+                textField.text = viewText.ToString();                
+            } 
+        } else if((isOperand==true)&(tempText!=null))
+            {   
+                if ( System.Convert.ToDouble(tempText.ToString())-System.Convert.ToInt32(tempText.ToString()) == 0)
+                {   
+                tempText = tempText + ",";       
+                viewText += ",";
+                textField.text = viewText.ToString();
                 }
+            }
 
-            viewText += ",";
+    }
+
+    public void PlusMinus() // еще в доработке 
+    {   
+        if((isOperand==false)&(viewText!=null))
+        {
+            if(System.Convert.ToInt32(viewText.ToString())>0)
+            {
+                viewText = "-" + viewText;
+            } else
+            {
+                viewText = viewText.Remove(0,1);
+            }
             textField.text = viewText.ToString();
         }
+
+
+        if(isOperand == true)
+            if(operand=="+")
+            {
+                viewText = tempOper; 
+                viewText += "-";
+                operand = "-";
+                
+            }else if(operand=="-")
+            {
+                viewText = tempOper;
+                viewText += "+"; 
+                operand = "+";
+                
+            }
+
+        textField.text = viewText.ToString();
     }
 
     public void UpdateOperand(string newOperand)
@@ -98,16 +132,11 @@ public class Calculator : MonoBehaviour
         if((viewText!=null)&(isOperand==false))
         {   
             
-            if (resultFunction != null)
-            {   
-                Debug.Log("resultFunction = " + resultFunction);
-                inputFunction=float.Parse(resultFunction);
-            } else if(isResultValue == true)
+             if(isResultValue == true)
             {
                 inputFunction=float.Parse(result);
             } else 
             {    
-                Debug.Log("viewText = " + viewText);
                 inputFunction=float.Parse(viewText);
             }
 
@@ -123,13 +152,8 @@ public class Calculator : MonoBehaviour
             }
 
             inputFunction=0;
-            viewText = textField.text;
-            resultFunction = textField.text;
-
-            isAnswer = false;
-            isResultValue = false;
-
-            Debug.Log("viewText = " + viewText);
+            result = viewText = textField.text;
+            isResultValue = true;
         }
     }
 
@@ -159,8 +183,8 @@ public class Calculator : MonoBehaviour
             }
 
 
-        input_1 = input_2 = 0;
         click = 0;
+        input_1 = input_2 = 0;
         
         result = viewText = textField.text;
 
@@ -173,6 +197,8 @@ public class Calculator : MonoBehaviour
 
     public void ButtonBackspace() 
     {   
+        ChangeAfterAnswerAddValue();
+
         if((isOperand==true)&(click==1)&(tempText==null))
         {
             isOperand = false;
@@ -186,16 +212,17 @@ public class Calculator : MonoBehaviour
         }
 
         viewText = viewText.Remove(viewText.Length - 1);
-        textField.text = viewText;      
+        textField.text = viewText.ToString();      
     }
 
     public void ButtonClear()
     {
-        resultFunction = viewText = tempText = operand = null;
+        viewText = tempText = operand = result = tempOper = null;
         textField.text = "";
 
         click = 0;
-        inputFunction=0;
+        inputFunction = 0;
+        input_1 = input_2 = 0;
 
         isAnswer = false;
         isOperand = false;
@@ -207,5 +234,15 @@ public class Calculator : MonoBehaviour
         textField.text = viewText = result;
         result = null;
         isResultValue = false;
+    }
+
+    public void ChangeAfterAnswerAddValue()
+    {
+        if(isAnswer==true)
+        {   
+            tempText = operand = null;
+            if(isResultValue==true)
+                ChangeAfterAnswer();
+        }
     }
 }

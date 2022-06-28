@@ -18,10 +18,6 @@ public class Buttoms : MonoBehaviour
     {   
         calculator.UpdateOperand(oper);
     }
-    public void UpdatePlusMinus()
-    {   
-        calculator.PlusMinus();
-    }
 
     public void AppendPeriod()
     {   

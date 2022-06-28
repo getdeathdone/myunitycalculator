@@ -8,7 +8,7 @@ public class Calculator : MonoBehaviour
 {
     public InputField textField;
     string viewText, tempText, operand, result, tempOper;
-    byte click, periodinput_1, periodinput_2;
+    byte click;
     double input_1, input_2;
     float inputFunction;
    
@@ -29,7 +29,6 @@ public class Calculator : MonoBehaviour
         {
             tempText = tempText + newValue;
         }
-
     }
 
     public void UpdatePeriod()
@@ -55,38 +54,6 @@ public class Calculator : MonoBehaviour
 
     }
 
-    public void PlusMinus() // еще в доработке 
-    {   
-        if((isOperand==false)&(viewText!=null))
-        {
-            if(System.Convert.ToInt32(viewText.ToString())>0)
-            {
-                viewText = "-" + viewText;
-            } else
-            {
-                viewText = viewText.Remove(0,1);
-            }
-            textField.text = viewText.ToString();
-        }
-
-
-        if(isOperand == true)
-            if(operand=="+")
-            {
-                viewText = tempOper; 
-                viewText += "-";
-                operand = "-";
-                
-            }else if(operand=="-")
-            {
-                viewText = tempOper;
-                viewText += "+"; 
-                operand = "+";
-                
-            }
-
-        textField.text = viewText.ToString();
-    }
 
     public void UpdateOperand(string newOperand)
     {   

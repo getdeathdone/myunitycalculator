@@ -24,6 +24,11 @@ public class Buttoms : MonoBehaviour
         calculator.UpdatePeriod();
     }
 
+    public void UpdatePlusMinus()
+    {   
+        calculator.PlusMinus();
+    }
+
     public void Function(string valuefunction)
     {
         calculator.FunctionValue(valuefunction);
@@ -48,7 +53,5 @@ public class Buttoms : MonoBehaviour
     {   
         calculator.WorkingWithResults();
     }
-
-
 
 }

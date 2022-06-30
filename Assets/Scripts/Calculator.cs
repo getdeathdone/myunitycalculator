@@ -34,8 +34,7 @@ public class Calculator : MonoBehaviour
         if((isWorkResult==true)&(isAnswer==true))
             ChangeAfterAnswerAddValue();
         else if((isWorkResult==false)&(isAnswer==true))
-            ButtonClear();   
-        
+            ButtonClear();      
         
         viewText += newValue;
         textField.text = viewText.ToString();
@@ -69,6 +68,42 @@ public class Calculator : MonoBehaviour
                 }
             }
 
+    }
+
+    public void PlusMinus() 
+    {   
+        if(viewText!=null)
+        {
+            ChangeAfterAnswerAddValue();
+
+            if(isOperand==false)
+            {
+                if(System.Convert.ToInt32(viewText.ToString())>0)
+                {
+                    viewText = viewText.Insert(0,"-");
+                
+                } else if (System.Convert.ToInt32(viewText.ToString())<0)
+                {
+                    viewText = viewText.Remove(0,1);
+                }
+            } else if (isOperand == true)
+            {   
+                viewText = tempOper;
+                if (operand=="-")
+                {
+                    viewText += "+"; 
+                    operand = "+";
+                } else if(operand=="+")
+                {
+                    viewText += "-";
+                    operand = "-";
+                }
+                viewText += tempText; 
+            }
+    
+        textField.text = viewText.ToString();
+        }
+    
     }
 
     public void UpdateOperand(string newOperand)
@@ -174,24 +209,27 @@ public class Calculator : MonoBehaviour
 
     public void ButtonBackspace() 
     {   
-        ChangeAfterAnswerAddValue();
-
-        if((isOperand==true)&(click==1)&(tempText==null))
+        if(viewText!=null)
         {
+            ChangeAfterAnswerAddValue();
+
+            if((isOperand==true)&(click==1)&(tempText==null))
+            {
             isOperand = false;
             operand = null;
             click = 0;
-        }
+            }
 
-        if(isOperand)
-        {
+            if(isOperand)
+            {
             tempText = tempText.Remove(tempText.Length - 1);
-        }
+            }
 
-        viewText = viewText.Remove(viewText.Length - 1);
-        textField.text = viewText.ToString(); 
+            viewText = viewText.Remove(viewText.Length - 1);
+            textField.text = viewText.ToString(); 
 
-        isAnswer = false;     
+            isAnswer = false;  
+        }   
     }
 
     public void ButtonClear()

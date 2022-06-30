@@ -44,5 +44,11 @@ public class Buttoms : MonoBehaviour
         calculator.ButtonBackspace();
     }
 
+    public void WorkingWithResults()
+    {   
+        calculator.WorkingWithResults();
+    }
+
+
 
 }

@@ -5,20 +5,37 @@ using UnityEngine.UI;
 
                                                                                     //Debug.Log()
 public class Calculator : MonoBehaviour
-{
+{   
+    public const double PositiveInfinity = 1.0 / 0.0;
+    public const double NegativeInfinity = -1.0 / 0.0;
+
     public InputField textField;
     string viewText, tempText, operand, result, tempOper;
     byte click;
     double input_1, input_2;
     float inputFunction;
    
+    bool isAnswer, isOperand ,isResultValue, isWorkResult = false;
 
-    bool isAnswer, isOperand ,isResultValue = false;
+    public void WorkingWithResults()
+    {   
+        if(isWorkResult==false)
+            isWorkResult = true;
+        else isWorkResult = false;
+
+        Debug.Log("isWorkResult  = " + isWorkResult );
+    }
 
     public void UpdateValue(string newValue)
     {   
+        if ((System.Convert.ToDouble(result)==PositiveInfinity)^(System.Convert.ToDouble(result)==NegativeInfinity)^(double.IsNaN(System.Convert.ToDouble(result))))
+            ButtonClear();
+
+        if((isWorkResult==true)&(isAnswer==true))
+            ChangeAfterAnswerAddValue();
+        else if((isWorkResult==false)&(isAnswer==true))
+            ButtonClear();   
         
-        ChangeAfterAnswerAddValue();
         
         viewText += newValue;
         textField.text = viewText.ToString();
@@ -53,7 +70,6 @@ public class Calculator : MonoBehaviour
             }
 
     }
-
 
     public void UpdateOperand(string newOperand)
     {   
@@ -179,7 +195,9 @@ public class Calculator : MonoBehaviour
         }
 
         viewText = viewText.Remove(viewText.Length - 1);
-        textField.text = viewText.ToString();      
+        textField.text = viewText.ToString(); 
+
+        isAnswer = false;     
     }
 
     public void ButtonClear()

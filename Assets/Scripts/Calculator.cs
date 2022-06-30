@@ -114,14 +114,7 @@ public class Calculator : MonoBehaviour
     {
         if((viewText!=null)&(isOperand==false))
         {   
-            
-             if(isResultValue == true)
-            {
-                inputFunction=float.Parse(result);
-            } else 
-            {    
-                inputFunction=float.Parse(viewText);
-            }
+                inputFunction = float.Parse(viewText);
 
             if (newFunction == "x²")
             {
@@ -134,9 +127,10 @@ public class Calculator : MonoBehaviour
                 textField.text = (1/inputFunction).ToString();
             }
 
+            isAnswer = isResultValue = true;
             inputFunction=0;
             result = viewText = textField.text;
-            isResultValue = true;
+            
         }
     }
 

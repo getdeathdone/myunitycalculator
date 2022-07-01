@@ -10,7 +10,7 @@ public class Calculator : MonoBehaviour
     public const double NegativeInfinity = -1.0 / 0.0;
 
     public InputField textField;
-    string viewText, tempText, operand, result, tempOper;
+    string viewText, tempText, operand, result, tempOper, tempValueOper;
     byte click;
     double input_1, input_2;
     float inputFunction;
@@ -89,15 +89,15 @@ public class Calculator : MonoBehaviour
 
             if(isOperand==false)
             {
-                if(System.Convert.ToInt32(viewText.ToString())>0)
+                if(System.Convert.ToDouble(viewText.ToString())>0)
                 {
                     viewText = viewText.Insert(0,"-");
                 
-                } else if (System.Convert.ToInt32(viewText.ToString())<0)
+                } else if (System.Convert.ToDouble(viewText.ToString())<0)
                 {
                     viewText = viewText.Remove(0,1);
                 }
-            } else if (isOperand == true)
+            } else if ((isOperand == true)&(operand!="*")&(operand!="/"))
             {   
                 viewText = tempOper;
                 if (operand=="-")
@@ -126,7 +126,7 @@ public class Calculator : MonoBehaviour
                 {   
                     if((isAnswer==true)&(result!=null))
                     {   
-                    tempText = operand = null;
+                    tempText = operand = tempValueOper = null;
                     input_1 = System.Convert.ToDouble(result.ToString());
                     viewText = result;
                     } else
@@ -148,6 +148,7 @@ public class Calculator : MonoBehaviour
 
             if((click > 1)&(tempText!=null))
             {   
+                tempValueOper = newOperand;
                 Answer();   
             }
 
@@ -176,7 +177,6 @@ public class Calculator : MonoBehaviour
             isAnswer = isResultValue = true;
             inputFunction=0;
             result = viewText = textField.text;
-            
         }
     }
 
@@ -214,7 +214,10 @@ public class Calculator : MonoBehaviour
         isAnswer = true;
         isOperand = false;
         isResultValue = true;
-        
+
+        if(tempValueOper!=null)
+                UpdateOperand(tempValueOper);
+            
         }
     }
 
@@ -290,15 +293,9 @@ public class Calculator : MonoBehaviour
     {
         if(isAnswer==true)
         {   
-            int period_search = 0;
-            for (int i = 0; i < viewText.Length; i++)
-            {
-                if (viewText[i] == ',') 
-                {
-                    period_search++;
-                }
-            }
-            if (period_search>0)
+            int numberOfCommas = period_chek(viewText);
+
+            if (numberOfCommas>0)
                 isPeriodInt1 = true;
             else isPeriodInt1 = false;
 
@@ -308,5 +305,18 @@ public class Calculator : MonoBehaviour
             if(isResultValue==true)
                 ChangeAfterAnswer();
         }
+    }
+
+    public int period_chek(string searchstring)
+    {
+        int period_search = 0;
+            for (int i = 0; i < searchstring.Length; i++)
+            {
+                if (searchstring[i] == ',') 
+                {
+                    period_search++;
+                }
+            }
+        return period_search;
     }
 }

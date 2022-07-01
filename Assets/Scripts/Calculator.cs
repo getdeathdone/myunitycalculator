@@ -15,7 +15,7 @@ public class Calculator : MonoBehaviour
     double input_1, input_2;
     float inputFunction;
    
-    bool isAnswer, isOperand ,isResultValue, isWorkResult = false;
+    bool isAnswer, isOperand ,isResultValue, isWorkResult, isPeriodInt1, isPeriodInt2 = false;
 
     public void WorkingWithResults()
     {   
@@ -51,22 +51,33 @@ public class Calculator : MonoBehaviour
     {   
         if((isOperand==false)&(viewText!=null))
         {   
-            if ( System.Convert.ToDouble(viewText.ToString())-System.Convert.ToInt32(viewText.ToString()) == 0)
-            {   
-                ChangeAfterAnswerAddValue();     
-                    
-                viewText += ",";
-                textField.text = viewText.ToString();                
-            } 
-        } else if((isOperand==true)&(tempText!=null))
-            {   
-                if ( System.Convert.ToDouble(tempText.ToString())-System.Convert.ToInt32(tempText.ToString()) == 0)
+            ChangeAfterAnswerAddValue();
+            if ((isPeriodInt1==true)&(tempText==null))
+                {
+                    viewText = viewText.Replace(",", "");
+                    isPeriodInt1 = false;
+                }else if ((System.Convert.ToDouble(viewText.ToString())-System.Convert.ToInt32(viewText.ToString()) == 0)&(isPeriodInt1==false)&(tempText==null))
                 {   
-                tempText = tempText + ",";       
-                viewText += ",";
-                textField.text = viewText.ToString();
-                }
+                    viewText += ",";
+                    isPeriodInt1 = true; 
+                } 
+        } else if((isOperand==true)&(tempText!=null))
+                {   
+                if (isPeriodInt2==true)
+                {   
+                    tempText = tempText.Replace(",", "");
+                    viewText = tempOper;
+                    viewText += operand;
+                    viewText += tempText;
+                    isPeriodInt2 = false;
+                } else if ((System.Convert.ToDouble(tempText.ToString())-System.Convert.ToInt32(tempText.ToString()) == 0)&(isPeriodInt2==false))
+                {   
+                    tempText = tempText + ",";       
+                    viewText += ",";
+                    isPeriodInt2 = true;
+                }  
             }
+            textField.text = viewText.ToString();
 
     }
 
@@ -209,8 +220,29 @@ public class Calculator : MonoBehaviour
 
     public void ButtonBackspace() 
     {   
-        if(viewText!=null)
+        int lengthViewText = viewText.Length;
+        if(lengthViewText  == 1){
+            ButtonClear();
+            Debug.Log("ButtonClear()");
+        }
+
+        if((viewText[lengthViewText-1]==',')&(tempText==null))
         {
+            isPeriodInt1 = false;
+            Debug.Log("isPeriodInt1 = false;");
+        }
+        
+        if(tempText!=null)
+        {   int lengthTempText = tempText.Length;
+            if((tempText[lengthTempText-1]==',')&(isOperand==true))
+                isPeriodInt2 = false;
+            Debug.Log("isPeriodInt2 = false;");
+        }
+        
+
+
+        if(viewText!=null)
+        {   
             ChangeAfterAnswerAddValue();
 
             if((isOperand==true)&(click==1)&(tempText==null))
@@ -244,10 +276,11 @@ public class Calculator : MonoBehaviour
         isAnswer = false;
         isOperand = false;
         isResultValue = false;
+        isPeriodInt1 = isPeriodInt2 = false;
     }
 
     public void ChangeAfterAnswer()
-    {
+    {   
         textField.text = viewText = result;
         result = null;
         isResultValue = false;
@@ -257,6 +290,20 @@ public class Calculator : MonoBehaviour
     {
         if(isAnswer==true)
         {   
+            int period_search = 0;
+            for (int i = 0; i < viewText.Length; i++)
+            {
+                if (viewText[i] == ',') 
+                {
+                    period_search++;
+                }
+            }
+            if (period_search>0)
+                isPeriodInt1 = true;
+            else isPeriodInt1 = false;
+
+            isPeriodInt2 = false;
+
             tempText = operand = null;
             if(isResultValue==true)
                 ChangeAfterAnswer();
